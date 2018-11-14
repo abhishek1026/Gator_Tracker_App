@@ -92,7 +92,10 @@ router.post("/create", async (req, res, next) => {
         var userObject = {
             username: req.body.username,
             password: req.body.password,
-            email: req.body.email
+            email: req.body.email,
+            isAdmin: req.body.isAdmin,
+            name: req.body.name,
+            role: req.body.role
         };
     
         var newUser = new User(userObject);
@@ -121,7 +124,12 @@ router.post("/authorize", async (req, res, next) => {
         }
 
         if(user.password === req.body.password){
-            return res.redirect('../../new_index.html');
+            req.session = {
+                user: user
+            };
+            if(user.isAdmin)
+                return res.status(200).send("Admin Login!");
+            return res.status(201).send("User Login!");
         }
     
         return res.status(401).send("UNAUTHORIZED ACCESS: Incorrect password for username " + req.body.username + "!!!");
@@ -131,6 +139,17 @@ router.post("/authorize", async (req, res, next) => {
     }
 
 
+});
+
+router.delete("/logout", async (req, res, next) => {
+
+    try {
+        req.session.reset();
+        res.status(200).send('logged out!');
+
+    } catch (error) {
+        return res.status(500).send("Internal Server Error Occured!");
+    }
 });
 
 module.exports = router;

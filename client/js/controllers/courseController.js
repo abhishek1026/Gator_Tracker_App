@@ -1,9 +1,13 @@
-angular.module('courses').controller('CoursesController', ['$scope', 'Locations', 'Courses',
+angular.module('courses').controller('CoursesController', ['$scope', 'Locations', 'Courses', '$http',
 
-  function ($scope, Locations, Courses) {
+  function ($scope, Locations, Courses, $http) {
     /* Get all the courses, then bind it to the scope */
     Courses.getAll().then(function (response) {
-      $scope.courses = response.data;
+      $scope.courses = response.data.courses;
+      $scope.user = response.data.user;
+      if(!$scope.user || $scope.user.isAdmin != $scope.isAdmin){
+        window.location.href = '/';
+      }
       $scope.isLoading = false;
       console.log('Succesfully grabbed Course Data!', response.data);
     }, function (error) {
@@ -16,6 +20,7 @@ angular.module('courses').controller('CoursesController', ['$scope', 'Locations'
     $scope.searchText = "";
     $scope.searchOption = 0;
     $scope.keyWord = "";
+    $scope.user = {};
     let tempMarker = 0;
 
     function findCoordinates(code, buildings) {
@@ -33,6 +38,13 @@ angular.module('courses').controller('CoursesController', ['$scope', 'Locations'
 
       return {};
 
+    }
+
+    $scope.logout = function() {
+      $http.delete('/api/auth/logout').then(function(response){
+        if(response.status == 200)
+          window.location.href = '/login';
+      });
     }
 
     $scope.updateMap = function (building) {
@@ -70,7 +82,7 @@ angular.module('courses').controller('CoursesController', ['$scope', 'Locations'
 
       $scope.isSearching = true;
       if ($scope.searchOption === 1) {
-        Courses.getByCode($scope.searchText).then(function (response) {
+        Courses.getByCode($scope.searchText, $scope.term).then(function (response) {
           $scope.courses = response.data;
           console.log('Succesfully grabbed Course Data By Code!', response.data);
           $scope.isSearching = false;
@@ -80,7 +92,7 @@ angular.module('courses').controller('CoursesController', ['$scope', 'Locations'
         });
       }
       else if ($scope.searchOption === 2) {
-        Courses.getByTitle($scope.searchText).then(function (response) {
+        Courses.getByTitle($scope.searchText, $scope.term).then(function (response) {
           $scope.courses = response.data;
           console.log('Succesfully grabbed Course Data By Title!', response.data);
           $scope.isSearching = false;
@@ -90,7 +102,7 @@ angular.module('courses').controller('CoursesController', ['$scope', 'Locations'
         });
       }
       else {
-        Courses.getByProfessor($scope.searchText).then(function (response) {
+        Courses.getByProfessor($scope.searchText, $scope.term).then(function (response) {
           $scope.courses = response.data;
           console.log('Succesfully grabbed Course Data By Professor!', response.data);
           $scope.isSearching = false;

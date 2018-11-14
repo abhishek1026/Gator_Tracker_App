@@ -12,7 +12,7 @@
 <body>
     <div ng-app="directoryApp">
         <div class="container">
-            <div class="row" ng-controller="RegisterController">
+            <div class="row" ng-controller="RegisterController" ng-init="isAdmin=false">
                 <div class="col-md-3">
                 </div>
                 <div class="col-md-6">
@@ -23,7 +23,18 @@
                     <br/>
                     <input type="password" placeholder="Password" ng-model="newPassword" class="form-control" required ng-keyup="$event.keyCode == 13 ? register() : null">
                     <hr/>
+                    <label for="adminCheck">
+                        Click for Admin User!
+                    </label>
+                    <input id="adminCheck" type="checkbox" ng-model="isAdmin" class="form-control">
+                    <hr/>
+                    <input type="text" ng-model="displayName" class="form-control" placeholder="Name" required ng-keyup="$event.keyCode == 13 ? register() : null">
+                    <hr/>
+                    <input type="text" ng-model="role" class="form-control" placeholder="Role" required ng-keyup="$event.keyCode == 13 ? register() : null">
+                    <hr/>
                     <button class="btn btn-success form-control" ng-click="register()">Create Account</button>
+                    <hr/>
+                    <button class="btn btn-info form-control" ng-click="login()">Back to Login</button>
                     <hr/>
                     <div ng-if="formError" class="alert alert-warning">
                         Please fill out form properly!

@@ -10,19 +10,20 @@ var express = require('express'),
                     res.status(500).send("Internal Server Error while attempting to make GET request to ONE.UF API!");
                     return;
                 }
-                res.status(200).json(response.body[0].COURSES);
+                res.status(200).json({courses: response.body[0].COURSES, user: req.session.user});
             });
     });
 
-    router.get("/professor/:name", function(req, res, next){
+    router.get("/professor/:term/:name", function(req, res, next){
 
         let name = req.params.name;
+        let term = req.params.term;
 
-        if(!name || name.trim() === ""){
-            return res.status(400).send("Invalid URL Parameter Input for Professor Name!");
+        if(!name || name.trim() === "" || !term || term.trim() === ""){
+            return res.status(400).send("Invalid URL Parameter Input for Professor Name/Term!");
         }
 
-        http.get(`https://one.ufl.edu/apix/soc/schedule/?category=CSWP&term=2188&instructor=${name}`)
+        http.get(`https://one.ufl.edu/apix/soc/schedule/?category=CSWP&term=${term}&instructor=${name}`)
             .end(function(response){
                 if(response.status !== 200){
                     res.status(500).send("Internal Server Error while attempting to make GET request to ONE.UF API!");
@@ -32,15 +33,16 @@ var express = require('express'),
             });
     });
 
-    router.get("/title/:title", function(req, res, next){
+    router.get("/title/:term/:title", function(req, res, next){
 
         let title = req.params.title;
+        let term = req.params.term;
 
-        if(!title || title.trim() === ""){
-            return res.status(400).send("Invalid URL Parameter Input for Course Title!");
+        if(!title || title.trim() === "" || !term || term.trim() === ""){
+            return res.status(400).send("Invalid URL Parameter Input for Course Title/Term!");
         }
 
-        http.get(`https://one.ufl.edu/apix/soc/schedule/?category=CSWP&term=2188&course-title=${title}`)
+        http.get(`https://one.ufl.edu/apix/soc/schedule/?category=CSWP&term=${term}&course-title=${title}`)
             .end(function(response){
                 if(response.status !== 200){
                     res.status(500).send("Internal Server Error while attempting to make GET request to ONE.UF API!");
@@ -50,15 +52,16 @@ var express = require('express'),
             });
     });
 
-    router.get("/code/:code", function(req, res, next){
+    router.get("/code/:term/:code", function(req, res, next){
 
         let code = req.params.code;
+        let term = req.params.term;
 
-        if(!code || code.trim() === ""){
-            return res.status(400).send("Invalid URL Parameter Input for Course Code!");
+        if(!code || code.trim() === "" || !term || term.trim() === ""){
+            return res.status(400).send("Invalid URL Parameter Input for Course Code/Term!");
         }
 
-        http.get(`https://one.ufl.edu/apix/soc/schedule/?category=CSWP&term=2188&course-code=${code}`)
+        http.get(`https://one.ufl.edu/apix/soc/schedule/?category=CSWP&term=${term}&course-code=${code}`)
             .end(function(response){
                 if(response.status !== 200){
                     res.status(500).send("Internal Server Error while attempting to make GET request to ONE.UF API!");

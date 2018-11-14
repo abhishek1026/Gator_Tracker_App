@@ -3,14 +3,14 @@ angular.module('courses').factory('Courses', function($http) {
       getAll: function() {
         return $http.get('/api/courses');
       },
-      getByProfessor: function(professor) {
-        return $http.get(`/api/courses/professor/${professor}`);
+      getByProfessor: function(professor, term) {
+        return $http.get(`/api/courses/professor/${term}/${professor}`);
       },
-      getByCode: function(code) {
-         return $http.get(`/api/courses/code/${code}`);
+      getByCode: function(code, term) {
+         return $http.get(`/api/courses/code/${term}/${code}`);
       },
-      getByTitle: function(title) {
-        return $http.get(`/api/courses/title/${title}`);
+      getByTitle: function(title, term) {
+        return $http.get(`/api/courses/title/${term}/${title}`);
       }
     };
     return methods;

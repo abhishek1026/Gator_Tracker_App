@@ -7,6 +7,12 @@ angular.module('courses').controller('RegisterController', ['$scope', '$http',
         $scope.newUsername = "";
         $scope.newPassword = "";
         $scope.email = "";
+        $scope.displayName ="";
+        $scope.role = "";
+
+        $scope.login = function() {
+            window.location.href = "/login";
+        }
 
         $scope.register = function () {
 
@@ -14,15 +20,17 @@ angular.module('courses').controller('RegisterController', ['$scope', '$http',
             $scope.inputError = false;
 
             if ($scope.newUsername == undefined || $scope.newPassword == undefined || $scope.email == undefined ||
-                $scope.newUsername == "" || $scope.newPassword == "" || $scope.email == "") {
+                $scope.newUsername == "" || $scope.newPassword == "" || $scope.email == "" || $scope.displayName == undefined 
+                || $scope.displayName == "" || $scope.role == undefined || $scope.role == "") {
                 $scope.formError = true;
                 return;
             }
 
-            $http.post('/api/auth/create', { username: $scope.newUsername, password: $scope.newPassword, email: $scope.email })
+            $http.post('/api/auth/create', { username: $scope.newUsername, password: $scope.newPassword, email: $scope.email, 
+                        isAdmin: $scope.isAdmin, name: $scope.displayName, role: $scope.role})
                 .then(function (response) {
                     console.log(response.data);
-                    window.location.href = "/index.html";
+                    window.location.href = "/login";
                 },
                     function (response) {
                         if (response.status !== 200) {

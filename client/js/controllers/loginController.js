@@ -19,7 +19,10 @@ angular.module('courses').controller('LoginController', ['$scope', '$http',
 
         $http.post('/api/auth/authorize', {username: $scope.username, password: $scope.password})
             .then(function(response){
-                window.location.href = "/new_index.html";
+                if(response.status === 200)
+                    window.location.href = "/admin/" + $scope.username;
+                else
+                    window.location.href = "/user/" + $scope.username;
             },
             function(response){
                 if(response.status !== 200){
