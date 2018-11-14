@@ -1,0 +1,12 @@
+#searchBar {
+  margin: 15px 10px;
+}
+
+.tableWrapper {
+  max-height: 400px;
+  overflow: auto;
+}
+
+.formInput {
+  margin-bottom: 10px;
+}
