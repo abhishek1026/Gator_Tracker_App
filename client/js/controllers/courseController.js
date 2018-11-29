@@ -21,6 +21,7 @@ angular.module('courses').controller('CoursesController', ['$scope', 'Locations'
     $scope.searchOption = 0;
     $scope.keyWord = "";
     $scope.user = {};
+    $scope.selectedTAs = [];
     let tempMarker = 0;
 
     function findCoordinates(code, buildings) {
@@ -121,6 +122,14 @@ angular.module('courses').controller('CoursesController', ['$scope', 'Locations'
 
     $scope.showDetails = function (course) {
       $scope.detailedInfo = $scope.courses[$scope.courses.indexOf(course)];
+
+      Courses.grabTAs($scope.detailedInfo.code).then(
+          function(res){
+          $scope.selectedTAs = res.data;
+          },
+          function(res){
+          console.log(response.status);
+        });
     };
   }
 ]);

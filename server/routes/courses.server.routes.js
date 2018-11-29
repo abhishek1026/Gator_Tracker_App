@@ -1,6 +1,7 @@
 /* Dependencies */
 var express = require('express'), 
     http = require('unirest'),
+    User = require('../models/users.server.model.js'),
     router = express.Router();
 
     router.get("/", function(req, res, next){
@@ -12,6 +13,30 @@ var express = require('express'),
                 }
                 res.status(200).json({courses: response.body[0].COURSES, user: req.session.user});
             });
+    });
+
+    router.get("/TA/:code", function(req, res, next){
+
+        let code = req.params.code;
+        let result = [];
+
+        if(!code || code.trim() === ""){
+            return res.status(400).send("Invalid URL Parameter Input for Professor Name/Term!");
+        }
+
+        User.find({}, function(err, users){
+            if(err){
+                return res.status(500).send("Internal Server Error Occured while querying MongoDB!");
+            }
+            users.forEach(function(user){
+                if(user.role === "TA" && user.courses.indexOf(code) !== -1){
+                    result.push(user.name);
+                }
+            });
+            return res.json(result);
+        });
+
+        
     });
 
     router.get("/professor/:term/:name", function(req, res, next){

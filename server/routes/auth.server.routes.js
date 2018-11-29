@@ -95,7 +95,8 @@ router.post("/create", async (req, res, next) => {
             email: req.body.email,
             isAdmin: req.body.isAdmin,
             name: req.body.name,
-            role: req.body.role
+            role: req.body.role,
+            courses: req.body.courses
         };
     
         var newUser = new User(userObject);

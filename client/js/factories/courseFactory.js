@@ -11,6 +11,9 @@ angular.module('courses').factory('Courses', function($http) {
       },
       getByTitle: function(title, term) {
         return $http.get(`/api/courses/title/${term}/${title}`);
+      },
+      grabTAs: function(code) {
+        return $http.get(`/api/courses/TA/${code}`);
       }
     };
     return methods;

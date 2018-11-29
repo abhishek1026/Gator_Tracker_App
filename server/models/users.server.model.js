@@ -29,7 +29,8 @@ var usersSchema = new Schema({
   },
   role: {
     type: String
-  }
+  },
+  courses: [String]
 });
 
 /* create a 'pre' function that adds the updated_at (and created_at if not already there) property */

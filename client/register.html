@@ -18,29 +18,39 @@
                 <div class="col-md-6">
                     <h1>Gator Tracker - Register</h1>
                     <input type="email" placeholder="Email" ng-model="email" class="form-control" required ng-keyup="$event.keyCode == 13 ? register() : null">
-                    <br/>
-                    <input type="text" placeholder="Username" ng-model="newUsername" class="form-control" required ng-keyup="$event.keyCode == 13 ? register() : null">
-                    <br/>
-                    <input type="password" placeholder="Password" ng-model="newPassword" class="form-control" required ng-keyup="$event.keyCode == 13 ? register() : null">
-                    <hr/>
+                    <br />
+                    <input type="text" placeholder="Username" ng-model="newUsername" class="form-control" required
+                        ng-keyup="$event.keyCode == 13 ? register() : null">
+                    <br />
+                    <input type="password" placeholder="Password" ng-model="newPassword" class="form-control" required
+                        ng-keyup="$event.keyCode == 13 ? register() : null">
+                    <hr />
                     <label for="adminCheck">
                         Click for Admin User!
                     </label>
-                    <input id="adminCheck" type="checkbox" ng-model="isAdmin" class="form-control">
-                    <hr/>
+                    <input ng-change="updateSelect()" id="adminCheck" type="checkbox" ng-model="isAdmin" class="form-control">
+                    <hr />
                     <input type="text" ng-model="displayName" class="form-control" placeholder="Name" required ng-keyup="$event.keyCode == 13 ? register() : null">
-                    <hr/>
-                    <input type="text" ng-model="role" class="form-control" placeholder="Role" required ng-keyup="$event.keyCode == 13 ? register() : null">
-                    <hr/>
+                    <hr />
+                    <select ng-model="role" class="form-control" placeholder="Role" required ng-keyup="$event.keyCode == 13 ? register() : null">
+                        <option selected hidden disabled value="">Choose Role</option>
+                        <option value="Student" ng-if="!isAdmin">Student</option>
+                        <option value="TA" ng-if="isAdmin">TA</option>
+                        <option value="Professor" ng-if="isAdmin">Professor</option>
+                    </select>
+                    <input type="text" placeholder="Course Code(s) (comma separated)" ng-model="courses" class="form-control"
+                        ng-keyup="$event.keyCode == 13 ? register() : null">
+                    <br />
+                    <hr />
                     <button class="btn btn-success form-control" ng-click="register()">Create Account</button>
-                    <hr/>
+                    <hr />
                     <button class="btn btn-info form-control" ng-click="login()">Back to Login</button>
-                    <hr/>
+                    <hr />
                     <div ng-if="formError" class="alert alert-warning">
                         Please fill out form properly!
                     </div>
                     <div ng-if="inputError" class="alert alert-danger">
-                        Duplicate Username/Email!
+                        Duplicate Username/Email/Name!
                     </div>
                 </div>
             </div>
