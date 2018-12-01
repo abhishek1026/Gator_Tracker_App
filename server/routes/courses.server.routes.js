@@ -11,7 +11,19 @@ var express = require('express'),
                     res.status(500).send("Internal Server Error while attempting to make GET request to ONE.UF API!");
                     return;
                 }
-                res.status(200).json({courses: response.body[0].COURSES, user: req.session.user});
+                User.find({}, function(err, users){
+                    if(err){
+                        return res.status(500).send("Internal Server Error Occured while querying MongoDB!");
+                    }
+                    let admins = [];
+                    users.forEach(function(user){
+                        if(user.isAdmin){
+                            admins.push(user);
+                        }
+                    });
+                    return res.json({courses: response.body[0].COURSES, user: req.session.user, admins: admins});
+                });
+                
             });
     });
 

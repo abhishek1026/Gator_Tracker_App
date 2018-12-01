@@ -56,6 +56,20 @@
                 top: 120%;
             }
 
+            .miniLoader {
+                border: 16px solid #f3f3f3;
+                border-radius: 50%;
+                border-top: 16px solid #3498db;
+                width: 3%;
+                height: 3%;
+                -webkit-animation: spin 2s linear infinite;
+                /* Safari */
+                animation: spin 2s linear infinite;
+                position: absolute;
+                left: 48%;
+                bottom: 5%;
+            }
+
             /* Safari */
             @-webkit-keyframes spin {
                 0% {
@@ -84,6 +98,7 @@
                 <h2 style="text-align:center; color:rgb(40, 30, 170)" ng-if="!isLoading">Hello, {{user.name}}
                     ({{user.role}}) <span>
                         <button type="button" class="btn btn-danger" ng-click="logout()">Log Out</button>
+                        <button type="button" class="btn btn-success" ng-click="showMyCourses()">Show My Courses</button>
                     </span>
                 </h2>
             </div>
@@ -119,13 +134,95 @@
                         <tr>
                             <th>Course Code</th>
                             <th>Course Title</th>
-                            <th></th>
                         </tr>
                         <tr ng-repeat="course in courses" ng-click="showDetails(course)">
                             <td>{{course.code}}</td>
                             <td>{{course.name}}</td>
                         </tr>
                     </table>
+                </div>
+                <div class="jumbotron" style="margin-top: 10px" id="adminInfo" ng-show="!isLoading">
+                    <h3><span class="glyphicon glyphicon-th-list"></span> Admin Info</h3>
+                    <div id="profileRadio" ng-init="profile='link'">
+                        <label>
+                            <input type="radio" ng-model="profile" value="link" ng-checked="true" ng-click="resetMsg()">
+                            Link(s)
+                        </label>
+                        <label>
+                            <input type="radio" ng-model="profile" value="location" ng-click="resetMsg()">
+                            Location
+                        </label>
+                        <label>
+                            <input type="radio" ng-model="profile" value="office_hour" ng-click="resetMsg()">
+                            Office Hour(s)
+                        </label>
+                    </div>
+                    <div ng-show="profile === 'link'">
+                        <label class="form-control" for="LIURL">LinkedIn: </label>
+                        <input id="LIURL" ng-model="LinkedInLink" type="text" class="form-control" placeholder="Enter LinkedIn URL">
+                        <br />
+                        <label class="form-control" for="TWURL">Twitter: </label>
+                        <input id="TWURL" ng-model="TwitterLink" type="text" class="form-control" placeholder="Enter Twitter URL">
+                        <br />
+                        <button type="button" class="btn btn-success form-control" ng-disabled="profileUpdating"
+                            ng-click="updateLink()">Update Link</button>
+                        <div class="miniLoader" ng-if="profileUpdating"></div>
+                        <div ng-if="updateError" class="alert alert-danger">
+                            Failed to Post!
+                        </div>
+                        <div ng-if="updateSuccess" class="alert alert-success">
+                            Successfully Posted/Updated!
+                        </div>
+                    </div>
+                    <div ng-show="profile === 'location'">
+                        <label class="form-control" for="LOC">Building Code: </label>
+                        <input id="LOC" ng-model="BuildingCode" type="text" class="form-control" placeholder="Enter Building Code">
+                        <br />
+                        <button type="button" class="btn btn-success form-control" ng-disabled="profileUpdating"
+                            ng-click="updateLocation()">Update Location</button>
+                        <div class="miniLoader" ng-if="profileUpdating"></div>
+                        <div ng-if="updateError" class="alert alert-danger">
+                            Failed to Post!
+                        </div>
+                        <div ng-if="updateSuccess" class="alert alert-success">
+                            Successfully Posted/Updated!
+                        </div>
+                    </div>
+                    <div ng-show="profile === 'office_hour'">
+                        <label class="form-control" for="OH_ALIAS">Alias: </label>
+                        <input id="OH_ALIAS" ng-model="OfficeHour.alias" type="text" class="form-control" placeholder="Enter Unique Label">
+                        <br />
+                        <label class="form-control" for="OH_DAY">Day: </label>
+                        <input id="OH_DAY" ng-model="OfficeHour.day" type="text" class="form-control" placeholder="Enter Day of Week">
+                        <br />
+                        <label class="form-control" for="OF_ST">Start Time: </label>
+                        <input id="OH_ST" ng-model="OfficeHour.startTime" type="text" class="form-control" placeholder="HH:MM">
+                        <br />
+                        <label class="form-control" for="OH_SC">Start AM/PM: </label>
+                        <input id="OH_SC" ng-model="OfficeHour.startCode" type="text" class="form-control" placeholder="Enter 'AM'/'PM'">
+                        <br />
+                        <label class="form-control" for="OF_ET">End Time: </label>
+                        <input id="OH_ET" ng-model="OfficeHour.endTime" type="text" class="form-control" placeholder="HH:MM">
+                        <br />
+                        <label class="form-control" for="OH_EC">End AM/PM: </label>
+                        <input id="OH_EC" ng-model="OfficeHour.endCode" type="text" class="form-control" placeholder="Enter 'AM'/'PM'">
+                        <br />
+                        <label class="form-control" for="OH_BC">Building Code: </label>
+                        <input id="OH_BC" ng-model="OfficeHour.buildingCode" type="text" class="form-control" placeholder="Enter Building Code">
+                        <br />
+                        <label class="form-control" for="OH_BN">Building Number: </label>
+                        <input id="OH_BN" ng-model="OfficeHour.buildingNumber" type="text" class="form-control" placeholder="Enter Building Number">
+                        <br />
+                        <button type="button" class="btn btn-success form-control" ng-disabled="profileUpdating"
+                            ng-click="updateOH()">Add/Update Office Hour</button>
+                        <div class="miniLoader" ng-if="profileUpdating"></div>
+                        <div ng-if="updateError" class="alert alert-danger">
+                            Failed to Post!
+                        </div>
+                        <div ng-if="updateSuccess" class="alert alert-success">
+                            Successfully Posted/Updated!
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -157,6 +254,7 @@
                                         <p> Class Number: {{section.classNumber}}</p>
                                         <p> Instructor: {{section.instructors[0].name}}</p>
                                         <p> Display Name: {{section.display}}</p>
+                                        <p> Credit Hours: {{section.credits}}</p>
                                         <div ng-repeat="time in section.meetTimes">
                                             <div ng-repeat="day in time.meetDays">
                                                 <p> Time: {{day}} {{time.meetTimeBegin}} - {{time.meetTimeEnd}}
@@ -184,8 +282,6 @@
 
                     <div id='map'></div>
                     <br />
-                    <button id='fly'>Go to CSE</button>
-
                     <script>
                         mapboxgl.accessToken = 'pk.eyJ1IjoieW1hbyIsImEiOiJjam4xcW1vZHY0bmk3M3JxY3Fja20yN3k3In0.SqDrTF9dnoGFVukfQkkyjA';
                         var map = new mapboxgl.Map({
@@ -201,30 +297,7 @@
                             /* Style layer: A style layer ties together the source and image and specifies how they are displayed on the map. */
                         });
 
-                        document.getElementById('fly').addEventListener('click', function () {
-                            map.flyTo({
-                                center: [
-                                    -82.344042,
-                                    29.64811109999999],
-                                zoom: 16
-                            });
-                            map.addLayer({
-                                id: "marker",
-                                type: "symbol",
-                                /* Source: A data source specifies the geographic coordinate where the image marker gets placed. */
-                                source: {
-                                    type: "geojson",
-                                    data: {
-                                        type: "FeatureCollection",
-                                        features: [{ "type": "Feature", "geometry": { "type": "Point", "coordinates": ["-82.344042", "29.64811109999999"] } }]
-                                    }
-                                },
-                                layout: {
-                                    "icon-image": "custom-marker",
-                                }
-                            });
 
-                        });
                     </script>
 
                 </div>

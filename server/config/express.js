@@ -6,6 +6,7 @@ var express = require('express'),
   listingsRouter = require('../routes/listings.server.routes'),
   coursesRouter = require('../routes/courses.server.routes'),
   authRouter = require('../routes/auth.server.routes'),
+  profileRouter = require('../routes/profile.server.routes'),
   sessions = require("client-sessions");
 
 module.exports.init = function () {
@@ -28,8 +29,8 @@ module.exports.init = function () {
   app.use(sessions({
     cookieName: 'session', // cookie name dictates the key name added to the request object
     secret: 'abhikeks1026',
-    duration: 1000 * 60 * 5,
-    activeDuration: 1000 * 60 * 2
+    duration: 1000 * 60 * 30,
+    activeDuration: 1000 * 60 * 5
   }));
 
   app.use(morgan('dev'));
@@ -55,6 +56,8 @@ module.exports.init = function () {
   app.use('/api/courses', coursesRouter);
 
   app.use('/api/auth', authRouter);
+
+  app.use('/api/profile', profileRouter);
 
   app.get('/admin/:username', isAdmin, function (req, res, next) {
     if (req.params.username)
