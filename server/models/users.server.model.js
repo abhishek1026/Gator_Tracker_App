@@ -28,9 +28,38 @@ var usersSchema = new Schema({
     unique: true
   },
   role: {
-    type: String
+    type: String,
+    required: true
   },
-  courses: [String]
+  courses: [String],
+  location: {
+      latitude: Number,
+      longitude: Number
+  },
+  linkedIn: {
+    type: String,
+    unique: true
+  },
+  twitter: {
+    type: String,
+    unique: true
+  },
+  officeHours: {
+    type: [{
+      alias: {
+        type: String,
+        unique: true,
+        required: true
+      },
+      day: String,
+      startTime: String,
+      startCode: String,
+      endTime: String,
+      endCode: String,
+      buildingCode: String,
+      buildingNumber: String
+    }]
+  }
 });
 
 /* create a 'pre' function that adds the updated_at (and created_at if not already there) property */

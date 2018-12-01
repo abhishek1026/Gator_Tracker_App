@@ -56,6 +56,20 @@
                 top: 120%;
             }
 
+            .miniLoader {
+                border: 16px solid #f3f3f3;
+                border-radius: 50%;
+                border-top: 16px solid #3498db;
+                width: 3%;
+                height: 3%;
+                -webkit-animation: spin 2s linear infinite;
+                /* Safari */
+                animation: spin 2s linear infinite;
+                position: absolute;
+                left: 48%;
+                bottom: 5%;
+            }
+
             /* Safari */
             @-webkit-keyframes spin {
                 0% {
@@ -84,6 +98,7 @@
                 <h2 style="text-align:center; color:rgb(40, 30, 170)" ng-if="!isLoading">Hello, {{user.name}}
                     ({{user.role}}) <span>
                         <button type="button" class="btn btn-danger" ng-click="logout()">Log Out</button>
+                        <button type="button" class="btn btn-success" ng-click="showMyCourses()">Show My Courses</button>
                     </span>
                 </h2>
             </div>
@@ -119,13 +134,42 @@
                         <tr>
                             <th>Course Code</th>
                             <th>Course Title</th>
-                            <th></th>
                         </tr>
                         <tr ng-repeat="course in courses" ng-click="showDetails(course)">
                             <td>{{course.code}}</td>
                             <td>{{course.name}}</td>
                         </tr>
                     </table>
+                </div>
+                <div class="jumbotron" style="margin-top: 10px" id="adminInfo" ng-show="!isLoading">
+                    <h3><span class="glyphicon glyphicon-th-list"></span> Admin Info</h3>
+                    <div id="profileRadio" ng-init="profile='link'">
+                        <label>
+                            <input type="radio" ng-model="profile" value="link" ng-checked="true">
+                            Link(s)
+                        </label>
+                        <label>
+                            <input type="radio" ng-model="profile" value="coordinates">
+                            Coordinates
+                        </label>
+                    </div>
+                    <div ng-show="profile === 'link'">
+                        <label class="form-control" for="LIURL">LinkedIn: </label>
+                        <input id="LIURL" ng-model="LinkedInLink" type="text" class="form-control" placeholder="Enter LinkedIn URL">
+                        <br />
+                        <label class="form-control" for="TWURL">Twitter: </label>
+                        <input id="TWURL" ng-model="TwitterLink" type="text" class="form-control" placeholder="Enter Twitter URL">
+                        <br />
+                        <button type="button" class="btn btn-success form-control" ng-disabled="profileUpdating"
+                            ng-click="updateLink()">Update Link</button>
+                        <div class="miniLoader" ng-if="profileUpdating"></div>
+                        <div ng-if="updateError" class="alert alert-danger">
+                            Failed to Post!
+                        </div>
+                        <div ng-if="updateSuccess" class="alert alert-success">
+                            Successfully Posted/Updated!
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -157,6 +201,7 @@
                                         <p> Class Number: {{section.classNumber}}</p>
                                         <p> Instructor: {{section.instructors[0].name}}</p>
                                         <p> Display Name: {{section.display}}</p>
+                                        <p> Credit Hours: {{section.credits}}</p>
                                         <div ng-repeat="time in section.meetTimes">
                                             <div ng-repeat="day in time.meetDays">
                                                 <p> Time: {{day}} {{time.meetTimeBegin}} - {{time.meetTimeEnd}}
