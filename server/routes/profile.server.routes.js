@@ -64,7 +64,7 @@ router.post("/OH", function (req, res, next) {
                 }
             }
 
-            if(found){
+            if (found) {
                 let newDoc = new User(doc);
                 newDoc.save(function (err) {
                     if (err) {
@@ -74,7 +74,7 @@ router.post("/OH", function (req, res, next) {
                 });
                 return;
             }
-            
+
 
             doc.officeHours.push(oh);
             let newDoc = new User(doc);

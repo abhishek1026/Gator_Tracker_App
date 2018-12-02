@@ -94,14 +94,14 @@ angular.module('courses').controller('CoursesController', ['$scope', 'Locations'
       $scope.updateSuccess = false;
       let oh = $scope.OfficeHour;
 
-      if(!oh || !(oh.alias && oh.day && oh.startTime && oh.startCode && oh.endTime && oh.endCode && oh.buildingCode && oh.buildingNumber)){
+      if (!oh || !(oh.alias && oh.day && oh.startTime && oh.startCode && oh.endTime && oh.endCode && oh.buildingCode && oh.buildingNumber)) {
         $scope.updateError = true;
         return;
       }
 
       $scope.profileUpdating = true;
 
-      $http.post("/api/profile/OH", { oh: oh})
+      $http.post("/api/profile/OH", { oh: oh })
         .then(function (response) {
           console.log(response.data);
           $scope.profileUpdating = false;
@@ -151,9 +151,9 @@ angular.module('courses').controller('CoursesController', ['$scope', 'Locations'
       });
     }
 
-    $scope.updateMiniMap = function(building) {
+    $scope.updateMiniMap = function (building) {
       let coordinates = findCoordinates(building, Locations.data);
-      if(!coordinates){
+      if (!coordinates) {
         return;
       }
       updateMiniMap(coordinates.lat, coordinates.long);
@@ -274,7 +274,7 @@ angular.module('courses').controller('CoursesController', ['$scope', 'Locations'
         });
     };
 
-    $scope.resetMsg = function() {
+    $scope.resetMsg = function () {
       $scope.updateError = $scope.updateSuccess = false;
     }
   }
