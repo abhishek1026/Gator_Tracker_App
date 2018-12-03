@@ -21,7 +21,14 @@ var express = require('express'),
                             admins.push(user);
                         }
                     });
-                    return res.json({courses: response.body[0].COURSES, user: req.session.user, admins: admins});
+
+                    User.findOne({username: req.session.user.username}, function(err, user){
+                        if(err){
+                            return res.status(500).send("Internal Server Error!");
+                        }
+                        return res.json({courses: response.body[0].COURSES, user: user, admins: admins});
+                    });
+                    
                 });
                 
             });

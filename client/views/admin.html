@@ -134,10 +134,17 @@
                         <tr>
                             <th>Course Code</th>
                             <th>Course Title</th>
+                            <th></th>
                         </tr>
                         <tr ng-repeat="course in courses" ng-click="showDetails(course)">
                             <td>{{course.code}}</td>
                             <td>{{course.name}}</td>
+                            <td>
+                                <button class="btn btn-danger" ng-click="removeCourse(course.code);$event.stopPropagation()"
+                                    ng-if="user.courses.indexOf(course.code) !== -1">Remove</button>
+                                <button class="btn btn-success" ng-click="addCourse(course.code);$event.stopPropagation()"
+                                    ng-if="user.courses.indexOf(course.code) === -1">Add</button>
+                            </td>
                         </tr>
                     </table>
                 </div>
@@ -167,8 +174,9 @@
                         <button type="button" class="btn btn-success form-control" ng-disabled="profileUpdating"
                             ng-click="updateLink()">Update Link</button>
                         <div class="miniLoader" ng-if="profileUpdating"></div>
+                        <br />
                         <div ng-if="updateError" class="alert alert-danger">
-                            Failed to Post!
+                            Server Error!
                         </div>
                         <div ng-if="updateSuccess" class="alert alert-success">
                             Successfully Posted/Updated!
@@ -181,16 +189,31 @@
                         <button type="button" class="btn btn-success form-control" ng-disabled="profileUpdating"
                             ng-click="updateLocation()">Update Location</button>
                         <div class="miniLoader" ng-if="profileUpdating"></div>
+                        <br />
                         <div ng-if="updateError" class="alert alert-danger">
-                            Failed to Post!
+                            Server Error!
+                        </div>
+                        <div ng-if="formError" class="alert alert-warning">
+                            Form Completion Error!
                         </div>
                         <div ng-if="updateSuccess" class="alert alert-success">
                             Successfully Posted/Updated!
                         </div>
                     </div>
                     <div ng-show="profile === 'office_hour'">
-                        <label class="form-control" for="OH_ALIAS">Alias: </label>
-                        <input id="OH_ALIAS" ng-model="OfficeHour.alias" type="text" class="form-control" placeholder="Enter Unique Label">
+                        <hr />
+                        <select ng-disabled="OHCheck" class="form-control" ng-change="updateForm()" ng-model="selectedOH"
+                            placeholder="Role" ng-options="ohh as ohh.alias for ohh in user.officeHours">
+                        </select>
+                        <br />
+                        <label for="ohCheck">
+                            Click for new OH!
+                        </label>
+                        <br />
+                        <input ng-change="updateForm()" id="ohCheck" type="checkbox" ng-model="OHCheck" class="form-control">
+                        <label class="form-control" for="OH_ALIAS" ng-disabled="!OHCheck">Alias: </label>
+                        <input ng-disabled="!OHCheck" id="OH_ALIAS" ng-model="OfficeHour.alias" type="text" class="form-control"
+                            placeholder="Enter Unique Label">
                         <br />
                         <label class="form-control" for="OH_DAY">Day: </label>
                         <input id="OH_DAY" ng-model="OfficeHour.day" type="text" class="form-control" placeholder="Enter Day of Week">
@@ -215,11 +238,22 @@
                         <input id="OH_BN" ng-model="OfficeHour.buildingNumber" type="text" class="form-control"
                             placeholder="Enter Building Number">
                         <br />
-                        <button type="button" class="btn btn-success form-control" ng-disabled="profileUpdating"
+                        <button type="button" class="btn btn-success form-control" ng-disabled="profileUpdating || (!OHCheck && !selectedOH.hasOwnProperty('alias'))"
                             ng-click="updateOH()">Add/Update Office Hour</button>
+                        <hr />
+                        <button type="button" class="btn btn-danger form-control" ng-disabled="profileUpdating"
+                            ng-click="deleteOH()" ng-show="!OHCheck && selectedOH.hasOwnProperty('alias')">Delete
+                            Office Hour</button>
                         <div class="miniLoader" ng-if="profileUpdating"></div>
+                        <br />
                         <div ng-if="updateError" class="alert alert-danger">
-                            Failed to Post!
+                            Server Error!
+                        </div>
+                        <div ng-if="formError" class="alert alert-warning">
+                            Form Completion Error!
+                        </div>
+                        <div ng-if="deleteSuccess" class="alert alert-success">
+                            Successfully Deleted!
                         </div>
                         <div ng-if="updateSuccess" class="alert alert-success">
                             Successfully Posted/Updated!

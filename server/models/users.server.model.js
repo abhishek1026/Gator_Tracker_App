@@ -59,8 +59,15 @@ var usersSchema = new Schema({
       buildingCode: String,
       buildingNumber: String
     }]
+  },
+  lastBuilding: {
+    type: String
   }
-});
+},
+{
+  usePushEach: true
+}
+);
 
 /* create a 'pre' function that adds the updated_at (and created_at if not already there) property */
 usersSchema.pre('save', function(next) {

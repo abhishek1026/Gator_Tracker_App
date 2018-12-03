@@ -126,10 +126,17 @@
                         <tr>
                             <th>Course Code</th>
                             <th>Course Title</th>
+                            <th></th>
                         </tr>
                         <tr ng-repeat="course in courses" ng-click="showDetails(course)">
                             <td>{{course.code}}</td>
                             <td>{{course.name}}</td>
+                            <td>
+                                <button class="btn btn-danger" ng-click="removeCourse(course.code);$event.stopPropagation()"
+                                    ng-if="user.courses.indexOf(course.code) !== -1">Remove</button>
+                                <button class="btn btn-success" ng-click="addCourse(course.code);$event.stopPropagation()"
+                                    ng-if="user.courses.indexOf(course.code) === -1">Add</button>
+                            </td>
                         </tr>
                     </table>
                 </div>
