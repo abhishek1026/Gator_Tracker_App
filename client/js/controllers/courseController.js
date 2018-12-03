@@ -3,6 +3,9 @@ angular.module('courses').controller('CoursesController', ['$scope', 'Locations'
   function ($scope, Locations, Courses, $http) {
     /* Get all the courses, then bind it to the scope */
     Courses.getAll().then(function (response) {
+      if (!$scope.user || $scope.user.isAdmin != $scope.isAdmin) {
+        window.location.href = '/';
+      }
       $scope.courses = response.data.courses;
       $scope.user = response.data.user;
       $scope.selectedOH = ($scope.user.officeHours.length) ? $scope.user.officeHours[0] : {};
@@ -11,9 +14,6 @@ angular.module('courses').controller('CoursesController', ['$scope', 'Locations'
       $scope.LinkedInLink = $scope.user.linkedIn;
       $scope.TwitterLink = $scope.user.twitter;
       $scope.BuildingCode = $scope.user.lastBuilding;
-      if (!$scope.user || $scope.user.isAdmin != $scope.isAdmin) {
-        window.location.href = '/';
-      }
       $scope.isLoading = false;
       console.log('Succesfully grabbed Course Data!', response.data);
     }, function (error) {

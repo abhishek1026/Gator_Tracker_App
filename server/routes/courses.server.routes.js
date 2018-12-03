@@ -22,6 +22,10 @@ var express = require('express'),
                         }
                     });
 
+                    if(!req.session.user){
+                        return res.status(200).json({courses: response.body[0].COURSES, admins: admins});
+                    }
+
                     User.findOne({username: req.session.user.username}, function(err, user){
                         if(err){
                             return res.status(500).send("Internal Server Error!");
