@@ -3,11 +3,12 @@ angular.module('courses').controller('CoursesController', ['$scope', 'Locations'
   function ($scope, Locations, Courses, $http) {
     /* Get all the courses, then bind it to the scope */
     Courses.getAll().then(function (response) {
-      if (!$scope.user || $scope.user.isAdmin != $scope.isAdmin) {
-        window.location.href = '/';
-      }
       $scope.courses = response.data.courses;
       $scope.user = response.data.user;
+      if (!$scope.user || $scope.user.isAdmin != $scope.isAdmin) {
+        window.location.href = '/';
+        return;
+      }
       $scope.selectedOH = ($scope.user.officeHours.length) ? $scope.user.officeHours[0] : {};
       $scope.updateForm();
       $scope.admins = response.data.admins;
